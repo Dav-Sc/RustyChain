@@ -7,9 +7,9 @@ use serde_json::to_string;
 /// Represents a date with day, month, and year.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GDate {
-    day: u32,
-    month: u32,
-    year: u32,
+    pub day: u32,
+    pub month: u32,
+    pub year: u32,
 }
 
 impl GDate {
@@ -27,21 +27,21 @@ impl GDate {
 /// Represents a person with an id, first name, surname, mother's id, father's id, date of birth, date of death, and additional info.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Person {
-    id: i32,
-    pub(crate) firstname: Option<String>,
-    surname: Option<String>,
-    mother_id: Option<i32>,
-    father_id: Option<i32>,
-    dob: Option<GDate>,
-    dod: Option<GDate>,
-    info: Option<String>,
+    pub id: i32,
+    pub firstname: Option<String>,
+    pub surname: Option<String>,
+    pub mother_id: Option<i32>,
+    pub father_id: Option<i32>,
+    pub dob: Option<GDate>,
+    pub dod: Option<GDate>,
+    pub info: Option<String>,
 }
 
 /// Represents an edge in the graph with a from_person_id and a to_person_id.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Edge {
-    from_person_id: i32,
-    to_person_id: i32,
+    pub from_person_id: i32,
+    pub to_person_id: i32,
 }
 
 /// Represents a graph database with persons and edges.

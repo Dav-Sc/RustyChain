@@ -1,5 +1,6 @@
 use dataframe::GraphDatabase;
 use dataframe::Person;
+use dataframe::GDate;
 
 mod dataframe;
 
@@ -25,7 +26,7 @@ fn main() {
 
 
     // Printing the graph
-    // graph_db.print_graph();
+    graph_db.print_graph();
 
     // Save the graph to a file
     // let file_path = "graph_db.json";
