@@ -24,7 +24,6 @@ fn main() {
 
 
 
-
     // Printing the graph
     graph_db.print_graph();
 
