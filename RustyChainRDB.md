@@ -11,3 +11,8 @@ Newdata type: gdate
 ID, NAME, SURNAME
 MotherID, FatherID
 DOB, DOD, INFO
+
+
+VM where you can manage jsons
+- Add, remove, edit, search, sort, filter, etc.
+- Interact VIA API

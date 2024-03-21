@@ -86,16 +86,11 @@ impl GraphDatabase {
         }
     }
 
-    /// Searches for a person in the `GraphDatabase` by id, first name, or surname.
-    // pub fn search_person(&self, search: &str) -> Option<(i32, Option<String>, Option<String>, Option<GDate>, Option<GDate>, Option<String>)> {
-    //     for person in self.persons.values() {
-    //         if person.id.to_string().contains(search) || person.firstname.as_ref().unwrap().contains(search) || person.surname.as_ref().unwrap().contains(search) {
-    //             return Some((person.id, person.firstname.clone(), person.surname.clone(), person.dob.clone(), person.dod.clone(), person.info.clone()));
-    //         }
-    //     }
-    //     None
-    // }
-
+    /// Returns a person from the `GraphDatabase`.
+    /// If the person does not exist, it returns a `Person` with all fields set to `None`.
+    pub fn get_person(&self, person_id: i32) -> &Person {
+        self.persons.get(&person_id).unwrap()
+    }
 
     /// Returns all children of a person in the `GraphDatabase`.
     pub fn get_children(&self, person_id: i32) -> Vec<&Person> {
@@ -124,6 +119,64 @@ impl GraphDatabase {
         let deserialized: GraphDatabase = serde_json::from_reader(reader)?;
         Ok(deserialized)
     }
+
+    //Given an ID find all children for each child of id get other parent != given id
+    pub fn get_mates(&self, person_id: i32) -> Vec<&Person> {
+        let mut mates = Vec::new();
+        for edge in &self.edges {
+            if edge.from_person_id == person_id {
+                let child = self.persons.get(&edge.to_person_id).unwrap();
+                let mother_id = child.mother_id.unwrap();
+                let father_id = child.father_id.unwrap();
+                if mother_id != person_id {
+                    mates.push(self.persons.get(&mother_id).unwrap());
+                }
+                if father_id != person_id {
+                    mates.push(self.persons.get(&father_id).unwrap());
+                }
+            }
+        }
+        mates
+    }
+
+    /// Renders a tree of the `GraphDatabase` starting from a person with a given id.
+    pub fn render_family_tree(&self, person_id: i32) {
+        let person = self.get_person(person_id);
+        print!("+ {} {}", person.firstname.as_ref().unwrap_or(&"Unknown".to_string()), person.surname.as_ref().unwrap_or(&"Unknown".to_string()));
+        println!("|");
+
+        let mother_id = person.mother_id.unwrap_or(-1);
+        let father_id = person.father_id.unwrap_or(-1);
+
+        if mother_id != -1 {
+            let mother = self.get_person(mother_id);
+            print!("+- Mother: {} {}", mother.firstname.as_ref().unwrap_or(&"Unknown".to_string()), mother.surname.as_ref().unwrap_or(&"Unknown".to_string()));
+        }
+
+        if father_id != -1 {
+            let father = self.get_person(father_id);
+            println!("+- Father: {} {}", father.firstname.as_ref().unwrap_or(&"Unknown".to_string()), father.surname.as_ref().unwrap_or(&"Unknown".to_string()));
+        }
+
+        let mates = self.get_mates(person_id);
+        if !mates.is_empty() {
+            println!("|");
+            println!("+- Spouses:");
+            for mate in mates {
+                println!("   +- {} {}", mate.firstname.as_ref().unwrap_or(&"Unknown".to_string()), mate.surname.as_ref().unwrap_or(&"Unknown".to_string()));
+            }
+        }
+
+        let children = self.get_children(person_id);
+        if !children.is_empty() {
+            println!("|");
+            println!("+- Children:");
+            for child in children {
+                println!("   +- {} {}", child.firstname.as_ref().unwrap_or(&"Unknown".to_string()), child.surname.as_ref().unwrap_or(&"Unknown".to_string()));
+            }
+        }
+    }
+
 }
 
 /// Creates a new `Person`.
