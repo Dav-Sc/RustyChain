@@ -6,8 +6,6 @@ Newdata type: gdate
 
 
 
-
-
 ID, NAME, SURNAME
 MotherID, FatherID
 DOB, DOD, INFO
@@ -15,4 +13,16 @@ DOB, DOD, INFO
 
 VM where you can manage jsons
 - Add, remove, edit, search, sort, filter, etc.
-- Interact VIA API
+
+commands:
+> createdb <name>
+> removedb <name>
+> listdb
+> find <name>
+> printdb <name>
+> add <var name> <json>
+> remove <var name> <json>
+- if remove ID remove all children
+
+REST API server
+- can send and recieve data

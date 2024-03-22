@@ -139,6 +139,10 @@ impl GraphDatabase {
         mates
     }
 
+    ///Create empty database
+
+
+
     /// Renders a tree of the `GraphDatabase` starting from a person with a given id.
     pub fn render_family_tree(&self, person_id: i32) {
         let person = self.get_person(person_id);
